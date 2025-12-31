@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Little Surprise</title>
+    <style>
+        :root {
+            --bg-color: #0f0b16;
+            --pink: #ff4d94;
+            --purple: #6a0dad;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at center, #1a1425 0%, #0f0b16 100%);
+            color: white;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Floating Hearts Background */
+        .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: var(--pink);
+            opacity: 0.6;
+            font-size: 20px;
+            animation: floatUp 4s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            padding: 20px;
+            z-index: 1;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Heart Screen Magic */
+        .heart-btn {
+            width: 90px;
+            height: 90px;
+            background: var(--pink);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 45px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 77, 148, 0.6);
+            animation: pulse 2s infinite;
+            user-select: none;
+            margin: 20px 0;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 77, 148, 0.6); }
+            50% { transform: scale(1.1); box-shadow: 0 0 40px rgba(255, 77, 148, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 77, 148, 0.6); }
+        }
+
+        /* Cards Screen */
+        .card-stack {
+            position: relative;
+            height: 250px;
+            width: 200px;
+            margin-top: 30px;
+        }
+
+        .card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            color: #333;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: grab;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            user-select: none;
+            touch-action: none;
+        }
+
+        /* Ticket & Polaroid */
+        .ticket {
+            background: linear-gradient(45deg, #d4af37, #f9e27b);
+            color: #4a3700;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px dashed #4a3700;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .polaroid {
+            background: white;
+            padding: 10px 10px 35px 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            transform: rotate(-2deg);
+            max-width: 20%;
+        }
+
+        .polaroid img { width: 100%; display: block; }
+
+        button {
+            margin-top: 25px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background: var(--pink);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 148, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts-container" id="hearts"></div>
+
+    <audio id="bgMusic" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <div id="screen1" class="screen active">
+            <h2 style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Hey Chellowww</h2>
+            <p>A little magic for you before the year begins💥🎀</p>
+            <div class="heart-btn" id="startBtn">❤️</div>
+            <p style="font-size: 0.8rem; opacity: 0.7;">Tap the heart to enter</p>
+        </div>
+
+        <div id="screen2" class="screen">
+            <h3>Clear the way...</h3>
+            <p>Swipe the distractions aside</p>
+            <div class="card-stack" id="cardStack">
+                <div class="card" style="background: #d1c4e9; z-index: 1;">🎁 Open Me</div>
+                <div class="card" style="background: #f8bbd0; z-index: 2;">Bad Days</div>
+                <div class="card" style="background: #b3e5fc; z-index: 3;">Work</div>
+                <div class="card" style="background: #ffecb3; z-index: 4;">Stress</div>
+            </div>
+        </div>
+
+        <div id="screen3" class="screen">
+            <div class="ticket">
+                <h1>GOLDEN TICKET</h1>
+                <p>Valid for every day ahead</p>
+                <hr>
+                <p style="font-size: 1.2rem;">"Unlimited Love💞, Muahhh💋, Hugs🫂& Smiles🤩"</p>
+            </div>
+            <button onclick="nextScreen(4)">Claim My Ticket</button>
+        </div>
+
+        <div id="screen4" class="screen">
+            <h3>A favorite memory</h3>
+            <div class="polaroid">
+                <img src="img2.jpg" alt="Memory">
+                <img src="img3.jpg" alt="Memory">
+                <img src="img4.jpg" alt="Memory">
+            </div>
+            <button onclick="nextScreen(5)">One more thing...</button>
+        </div>
+
+        <div id="screen5" class="screen">
+            <h3>For my MOON ...🌝 </h3>
+            <div style="background: white; color: #333; padding: 25px; border-radius: 15px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <h2 style="text-align: center; color: var(--pink); margin-top: 0;">2026</h2>
+                <p>I hope this year brings you calm mornings, peaceful nights, and little moments that make you smile...</p>
+                <p>You deserve all the happiness in the world. I'm right here with you!</p>
+                <p>I LOVE YOU CHOO CHOO MUCH </p>
+                <p>EN THANGAMEEE🥺🐣💍</p>
+                <p>Happie NEW YEAR🎈🥂 2026 My Love🖤💜</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        const heartsContainer = document.getElementById('hearts');
+
+        // Create random floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = ['❤️', '💋','🖤', '✨','💜', '🌸'][Math.floor(Math.random() * 6)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            heartsContainer.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 400);
+
+        // Start Journey
+        document.getElementById('startBtn').addEventListener('click', () => {
+            music.play().catch(() => console.log("Music play blocked"));
+            nextScreen(2);
+        });
+
+        function nextScreen(screenNum) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen' + screenNum).classList.add('active');
+        }
+
+        // Swipe Logic
+        const cards = document.querySelectorAll('.card');
+        let startX = 0;
+        let isDragging = false;
+
+        cards.forEach((card, index) => {
+            const onStart = (e) => {
+                isDragging = true;
+                startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                card.style.transition = 'none';
+            };
+
+            const onMove = (e) => {
+                if (!isDragging) return;
+                const currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                const deltaX = currentX - startX;
+                card.style.transform = `translateX(${deltaX}px) rotate(${deltaX/10}deg)`;
+            };
+
+            const onEnd = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                card.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+                
+                const transformMatrix = window.getComputedStyle(card).transform;
+                const xPos = transformMatrix !== 'none' ? parseInt(transformMatrix.split(',')[4]) : 0;
+
+                if (Math.abs(xPos) > 100) {
+                    card.style.transform = `translateX(${xPos > 0 ? 600 : -600}px) rotate(${xPos/5}deg)`;
+                    card.style.opacity = '0';
+                    if (card.textContent.includes("🎁")) setTimeout(() => nextScreen(3), 400);
+                } else {
+                    card.style.transform = `translateX(0) rotate(0)`;
+                }
+            };
+
+            card.addEventListener('mousedown', onStart);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onEnd);
+            card.addEventListener('touchstart', onStart, {passive: true});
+            card.addEventListener('touchmove', onMove, {passive: true});
+            card.addEventListener('touchend', onEnd);
+        });
+    </script>
+</body>
+</html>
